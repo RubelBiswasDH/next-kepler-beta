@@ -1,38 +1,38 @@
-import React from "react";
 // @ts-ignore
-import keplerGlReducer from "kepler.gl/reducers";
-import { createStore, combineReducers, applyMiddleware } from "redux";
-// @ts-ignore
-import { taskMiddleware } from "react-palm/tasks";
-import { Provider } from "react-redux";
-// @ts-ignore
+// const { KeplerGl } = dynamic(() => import('kepler.gl'));
 import KeplerGl from "kepler.gl";
+const mapBoxToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || ''
 
-
-const reducers = combineReducers({
-  keplerGl: keplerGlReducer
-});
-
-const store = createStore(reducers, {}, applyMiddleware(taskMiddleware));
-// @ts-ignore
-const KeplerContext: any = React.createContext(null);
+const mapStyles = [
+  {
+    id: 'my_dark_map',
+    label: 'Dark Streets 9',
+    url: 'mapbox://styles/mapbox/dark-v9',
+    layerGroups: [
+      {
+        slug: 'label',
+        filter: ({id}: any) => id.match(/(?=(label|place-|poi-))/),
+        defaultVisibility: true
+      },
+      {
+        // adding this will keep the 3d building option
+        slug: '3d building',
+        filter: () => false,
+        defaultVisibility: false
+      }
+    ]
+  }
+];
 export default function App() {
   return (
-      <KeplerContext.Provider value={ store }>
-        <KeplerContext.Consumer>
-          { 
-            (store: any) => (
-              <KeplerGl
-                id="map"
-                mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
-                width={ '600px' }
-                height={ '600px' }
-                store={ store }
-              />
-            )
-          }
-        </KeplerContext.Consumer>
-      </KeplerContext.Provider>
+    <div style={ containerStyles }>
+      <KeplerGl
+        id="map"
+        mapboxApiAccessToken={ mapBoxToken }
+        width={ 1200 }
+        height={ 700 }
+      />
+    </div>
   );
 }
 
