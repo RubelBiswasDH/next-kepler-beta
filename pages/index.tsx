@@ -1,7 +1,42 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 
+// @ts-ignore
+import keplerGlReducer from "kepler.gl/reducers"
+// @ts-ignore
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+
+// @ts-ignore
+import {enhanceReduxMiddleware} from 'kepler.gl/middleware';
+
+import { Provider } from "react-redux";
+
+// @ts-ignore
+import KeplerGl from "kepler.gl";
+
+const reducers = combineReducers({
+  // <-- mount kepler.gl reducer in your app
+  keplerGl: keplerGlReducer,
+});
+
+const initialState = {};
+const store = createStore(
+  reducers,
+  initialState,
+  applyMiddleware(
+    enhanceReduxMiddleware([
+      /* Add other middlewares here */
+    ])
+  )
+);
+
+// const middleware = enhanceReduxMiddleware([logger]);
+// const enhancers = [applyMiddleware(...middleware)];
+// const store = createStore(reducers, initialState, compose(...enhancers));
+
+// using createStore
 export default function Home() {
+  
   return (
     <>
       <Head>
@@ -11,7 +46,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        Kepler Map Comming
+        <Provider store={store}>
+          <KeplerGl
+            id="map"
+            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API}
+            width={window.innerWidth}
+            height={window.innerHeight}
+          />
+        </Provider>
       </main>
     </>
   )
