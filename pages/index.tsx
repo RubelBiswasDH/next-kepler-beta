@@ -8,10 +8,14 @@ const mapBoxToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || ''
 
 import { useDispatch, useSelector } from 'react-redux'
 // @ts-ignore
-import {addDataToMap} from 'kepler.gl/actions';
+import {addDataToMap, receiveMapConfig } from 'kepler.gl/actions';
+// @ts-ignore
+import { KeplerGlSchema } from 'kepler.gl/schemas';
 
 // @ts-ignore
 import {injectComponents, ModalContainerFactory, SidePanelFactory } from 'kepler.gl/components';
+
+import initialMapConfig from '../initialMapConfig.json'
 
 const NullComponent = () => null
 const NullComponentFactory = () => NullComponent
@@ -28,19 +32,6 @@ const mapStyles = [
     id: 'my_dark_map',
     label: 'Dark Streets 9',
     url: 'mapbox://styles/mapbox/dark-v9',
-    layerGroups: [
-      {
-        slug: 'label',
-        filter: ({id}: any) => id.match(/(?=(label|place-|poi-))/),
-        defaultVisibility: true
-      },
-      {
-        // adding this will keep the 3d building option
-        slug: '3d building',
-        filter: () => false,
-        defaultVisibility: false
-      }
-    ]
   }
 ];
 
@@ -57,20 +48,43 @@ const sampleTripData = {
     ['Sector 13, Sector 13, Uttara, Dhaka', 90.387525558472, 23.871017279476]
   ]
 };
+const NEXT_PUBLIC_BARIKOI_MAP_API_TOKEN = process.env.NEXT_PUBLIC_BARIKOI_MAP_API_TOKEN || ''
 
 const sampleConfig = {
   visState: {
     filters: []
   }
+  //,
+  // "mapStyle": {
+  //   "mapStyles": {
+  //     "barikoi-osm-lib": {
+  //       "custom": true,
+  //       "id": "barikoi-osm-lib",
+  //       "label": "OSM Liberty",
+  //       "url":`https://map.barikoi.com/styles/osm-liberty/style.json?key=${ NEXT_PUBLIC_BARIKOI_MAP_API_TOKEN }`,
+  //     }
+  //   }
+  // }
 };
-
 
 
 export default function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(
+    // dispatch(loadCustomMapStyle({ style:  {},  error: false}) )
+    // dispatch(addCustomMapStyle({
+    //   id: 'barikoi-osm-lib',
+    //   lable: 'Barikoi OSM Liberty',
+    //   url:`https://map.barikoi.com/styles/osm-liberty/style.json?key=${ NEXT_PUBLIC_BARIKOI_MAP_API_TOKEN }`,
+    // }))
+    
+      const initialCustomMapConfig = initialMapConfig
+      const parsedInitialCustomMapConfig = KeplerGlSchema.parseSavedConfig(
+        initialCustomMapConfig
+      )
+      dispatch(receiveMapConfig(parsedInitialCustomMapConfig))
+dispatch(
       addDataToMap({
         datasets: {
           info: {
@@ -93,6 +107,15 @@ export default function App() {
       <KeplerGl
         id="map"
         mapboxApiAccessToken={ mapBoxToken }
+        // mapboxApiAccessToken="" 
+        // mapStylesReplaceDefault={ false }
+        // mapStyles={[
+        //   {
+        //     "id": 'osm-liberty',
+        //     "label": 'osm-liberty',
+        //     "url":`https://map.barikoi.com/styles/osm-liberty/style.json?key=${ NEXT_PUBLIC_BARIKOI_MAP_API_TOKEN }`,
+        //   }
+        // ]}
         width={ 1200 }
         height={ 700 }
       />

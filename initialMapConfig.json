@@ -1,0 +1,70 @@
+{
+    "version": "v1",
+    "config": {
+        "visState": {
+            "filters": [],
+            "layers": [],
+            "interactionConfig": {
+                "tooltip": {
+                    "fieldsToShow": {},
+                    "compareMode": false,
+                    "compareType": "absolute",
+                    "enabled": true
+                },
+                "brush": {
+                    "size": 0.5,
+                    "enabled": false
+                },
+                "geocoder": {
+                    "enabled": false
+                },
+                "coordinate": {
+                    "enabled": false
+                }
+            },
+            "layerBlending": "normal",
+            "splitMaps": [],
+            "animationConfig": {
+                "currentTime": null,
+                "speed": 1
+            }
+        },
+        "mapState": {
+            "bearing": 0,
+            "dragRotate": false,
+            "latitude": 23.756406935153212,
+            "longitude": 90.35392175664097,
+            "pitch": 0,
+            "zoom": 13.119110717104624,
+            "isSplit": false
+        },
+        "mapStyle": {
+            "styleType": "barikoi_dark",
+            "topLayerGroups": {},
+            "visibleLayerGroups": {
+                "label": true,
+                "road": true,
+                "border": true,
+                "building": true,
+                "water": true,
+                "land": true,
+                "3d building": false
+            },
+            "threeDBuildingColor": [
+                3.7245996603793508,
+                6.518049405663864,
+                13.036098811327728
+            ],
+            "mapStyles": {
+                "barikoi_dark": {
+                    "accessToken": null,
+                    "custom": true,
+                    "icon":"",
+                    "id": "barikoi_dark",
+                    "label": "Barikoi OSM_Liberty",
+                    "url": "https://map.barikoi.com/styles/osm-liberty/style.json?key=NDQ0MDpKSjE4UlA5QzU3`"
+                }
+            }
+        }
+    }
+}
