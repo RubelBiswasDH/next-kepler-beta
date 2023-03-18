@@ -1,7 +1,14 @@
+
+import { useEffect } from 'react';
+
 // @ts-ignore
 // const { KeplerGl } = dynamic(() => import('kepler.gl'));
 // import KeplerGl from "kepler.gl";
 const mapBoxToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || ''
+
+import { useDispatch, useSelector } from 'react-redux'
+// @ts-ignore
+import {addDataToMap} from 'kepler.gl/actions';
 
 // @ts-ignore
 import {injectComponents, ModalContainerFactory, SidePanelFactory } from 'kepler.gl/components';
@@ -37,7 +44,50 @@ const mapStyles = [
   }
 ];
 
+
+const sampleTripData = {
+  fields: [
+    {name: 'Address', format: '', type: 'timestamp'},
+    {name: 'longitude', format: '', type: 'real'},
+    {name: 'latitude', format: '', type: 'real'}
+  ],
+  rows: [
+    ["Elephant Road Aeroplane Jame Masjid, House 390, Elephant Road, New Market, Dhaka" , 90.38552664, 23.735495800000002],
+    ["bengal, city corporation market, nilkhet road, nilkhet, new market, dhaka", 90.35842852176165, 23.75374140575628],
+    ['Sector 13, Sector 13, Uttara, Dhaka', 90.387525558472, 23.871017279476]
+  ]
+};
+
+const sampleConfig = {
+  visState: {
+    filters: []
+  }
+};
+
+
+
 export default function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(
+      addDataToMap({
+        datasets: {
+          info: {
+            label: 'Sample Taxi Trips in New York City',
+            id: 'test_trip_data'
+          },
+          data: sampleTripData
+        },
+        option: {
+          centerMap: true,
+          readOnly: true
+        },
+        config: sampleConfig
+      })
+    );
+  
+  }, [ ])
   return (
     <div style={ containerStyles }>
       <KeplerGl
