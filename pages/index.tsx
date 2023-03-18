@@ -1,7 +1,20 @@
 // @ts-ignore
 // const { KeplerGl } = dynamic(() => import('kepler.gl'));
-import KeplerGl from "kepler.gl";
+// import KeplerGl from "kepler.gl";
 const mapBoxToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || ''
+
+// @ts-ignore
+import {injectComponents, ModalContainerFactory, SidePanelFactory } from 'kepler.gl/components';
+
+const NullComponent = () => null
+const NullComponentFactory = () => NullComponent
+
+// Inject custom header into Kepler.gl, replacing default
+const KeplerGl = injectComponents([
+  [ ModalContainerFactory, NullComponentFactory ],
+  [ SidePanelFactory, NullComponentFactory ]
+]);
+
 
 const mapStyles = [
   {
@@ -23,6 +36,7 @@ const mapStyles = [
     ]
   }
 ];
+
 export default function App() {
   return (
     <div style={ containerStyles }>
